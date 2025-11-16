@@ -3,6 +3,7 @@ import { useWeb3 } from "./hooks/useWeb3";
 import { useDSCEngine } from "./hooks/useDSCEngine";
 import { CHAIN_ID } from "./constants/addresses";
 import { getNetworkName, getNetworkColor } from "./utils/network";
+import LandingPage from "./components/LandingPage";
 import Dashboard from "./components/Dashboard";
 import DepositCollateral from "./components/DepositCollateral";
 import MintDSC from "./components/MintDSC";
@@ -17,35 +18,28 @@ function App() {
   const [activeTab, setActiveTab] = useState("dashboard");
 
   if (!isConnected) {
-    return (
-      <div className="app">
-        <div className="connect-container">
-          <div className="connect-card">
-            <h1>RaveCoin</h1>
-            <p className="subtitle">Decentralized Stablecoin Platform</p>
-            <button 
-              className="connect-button" 
-              onClick={connectWallet}
-              disabled={isConnecting}
-            >
-              {isConnecting ? "Connecting..." : "Connect Wallet"}
-            </button>
-            <p className="hint">Please connect your MetaMask wallet to continue</p>
-            <p className="hint-small">
-              💡 Tip: If you want to switch accounts, you can select a different account in the MetaMask dialog, 
-              or disconnect this site in MetaMask settings (Settings → Connected Sites)
-            </p>
-          </div>
-        </div>
-      </div>
-    );
+    return <LandingPage />;
   }
 
   return (
     <div className="app">
       <header className="header">
         <div className="header-content">
-          <h1>RaveCoin</h1>
+          <div className="brand">
+            <div className="brand-icon">
+              <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <circle cx="16" cy="16" r="14" fill="url(#gradient)" opacity="0.9"/>
+                <path d="M16 8L20 16L16 20L12 16L16 8Z" fill="white" opacity="0.95"/>
+                <defs>
+                  <linearGradient id="gradient" x1="0" y1="0" x2="32" y2="32">
+                    <stop offset="0%" stopColor="#667eea"/>
+                    <stop offset="100%" stopColor="#764ba2"/>
+                  </linearGradient>
+                </defs>
+              </svg>
+            </div>
+            <h1 className="brand-name">RaveCoin</h1>
+          </div>
           <div className="header-right">
             <div className="network-badge" style={{ backgroundColor: getNetworkColor(CHAIN_ID) }}>
               {getNetworkName(CHAIN_ID)}
@@ -54,13 +48,17 @@ function App() {
               <span className="account-address">{account?.slice(0, 6)}...{account?.slice(-4)}</span>
             </div>
             <div className="health-factor-badge">
-              Health: {accountInfo.healthFactor}
+              <span className="health-label">Health</span>
+              <span className="health-value">{accountInfo.healthFactor}</span>
             </div>
             <button 
               className="disconnect-button"
               onClick={disconnectWallet}
               title="Disconnect wallet"
             >
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                <path d="M6 2L2 6L6 10M2 6H14" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+              </svg>
               Disconnect
             </button>
           </div>
@@ -68,42 +66,44 @@ function App() {
       </header>
 
       <nav className="nav">
-        <button 
-          className={activeTab === "dashboard" ? "nav-button active" : "nav-button"}
-          onClick={() => setActiveTab("dashboard")}
-        >
-          Dashboard
-        </button>
-        <button 
-          className={activeTab === "deposit" ? "nav-button active" : "nav-button"}
-          onClick={() => setActiveTab("deposit")}
-        >
-          Deposit
-        </button>
-        <button 
-          className={activeTab === "mint" ? "nav-button active" : "nav-button"}
-          onClick={() => setActiveTab("mint")}
-        >
-          Mint DSC
-        </button>
-        <button 
-          className={activeTab === "redeem" ? "nav-button active" : "nav-button"}
-          onClick={() => setActiveTab("redeem")}
-        >
-          Redeem
-        </button>
-        <button 
-          className={activeTab === "burn" ? "nav-button active" : "nav-button"}
-          onClick={() => setActiveTab("burn")}
-        >
-          Burn DSC
-        </button>
-        <button 
-          className={activeTab === "liquidate" ? "nav-button active" : "nav-button"}
-          onClick={() => setActiveTab("liquidate")}
-        >
-          Liquidate
-        </button>
+        <div className="nav-container">
+          <button 
+            className={activeTab === "dashboard" ? "nav-button active" : "nav-button"}
+            onClick={() => setActiveTab("dashboard")}
+          >
+            <span>Dashboard</span>
+          </button>
+          <button 
+            className={activeTab === "deposit" ? "nav-button active" : "nav-button"}
+            onClick={() => setActiveTab("deposit")}
+          >
+            <span>Deposit</span>
+          </button>
+          <button 
+            className={activeTab === "mint" ? "nav-button active" : "nav-button"}
+            onClick={() => setActiveTab("mint")}
+          >
+            <span>Mint DSC</span>
+          </button>
+          <button 
+            className={activeTab === "redeem" ? "nav-button active" : "nav-button"}
+            onClick={() => setActiveTab("redeem")}
+          >
+            <span>Redeem</span>
+          </button>
+          <button 
+            className={activeTab === "burn" ? "nav-button active" : "nav-button"}
+            onClick={() => setActiveTab("burn")}
+          >
+            <span>Burn DSC</span>
+          </button>
+          <button 
+            className={activeTab === "liquidate" ? "nav-button active" : "nav-button"}
+            onClick={() => setActiveTab("liquidate")}
+          >
+            <span>Liquidate</span>
+          </button>
+        </div>
       </nav>
 
       <main className="main-content">
