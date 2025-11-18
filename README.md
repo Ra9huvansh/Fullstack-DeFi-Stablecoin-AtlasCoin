@@ -7,7 +7,7 @@
 ![React](https://img.shields.io/badge/React-18+-61dafb?style=for-the-badge&logo=react)
 ![Foundry](https://img.shields.io/badge/Foundry-Latest-000000?style=for-the-badge)
 
-**A premium, over-collateralized stablecoin protocol built on Ethereum with a stunning Apple-inspired UI**
+**A decentralized, pegged, over-collateralized stablecoin protocol built on Ethereum with a stunning Apple-inspired UI**
 
 [Features](#-features) • [Quick Start](#-quick-start) • [Frontend](#-frontend-features) • [Smart Contracts](#-smart-contracts) • [Deployment](#-deployment)
 
