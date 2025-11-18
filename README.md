@@ -1,309 +1,440 @@
-## RaveCoin – Decentralized Stablecoin Platform
+# 💎 RaveCoin – Decentralized Stablecoin Platform
 
-RaveCoin is a **collateral‑backed, over‑collateralized stablecoin** built on Ethereum.
+<div align="center">
 
-It lets you:
-- **Deposit** blue‑chip assets (WETH / WBTC)
-- **Mint** a decentralized stablecoin (DSC)
-- **Redeem / Burn** to unlock collateral
-- **Liquidate** risky positions – fully on‑chain, enforced by smart contracts
+![RaveCoin](https://img.shields.io/badge/RaveCoin-Decentralized%20Stablecoin-667eea?style=for-the-badge&logo=ethereum)
+![Solidity](https://img.shields.io/badge/Solidity-0.8.19-363636?style=for-the-badge&logo=solidity)
+![React](https://img.shields.io/badge/React-18+-61dafb?style=for-the-badge&logo=react)
+![Foundry](https://img.shields.io/badge/Foundry-Latest-000000?style=for-the-badge)
 
-The project includes:
-- **Smart contracts** (Foundry)
-- A **modern React + Vite frontend** with an Apple‑inspired, black & silver “timepiece” UI
-- **Sepolia deployment tooling** and full docs
+**A premium, over-collateralized stablecoin protocol built on Ethereum with a stunning Apple-inspired UI**
 
----
+[Features](#-features) • [Quick Start](#-quick-start) • [Frontend](#-frontend-features) • [Smart Contracts](#-smart-contracts) • [Deployment](#-deployment)
 
-## 1. Concepts (Plain English)
-
-- **DSC (Decentralized StableCoin)**  
-  ERC20 token meant to track around **\$1**, backed by more value in collateral than is minted.
-
-- **Collateral (WETH / WBTC)**  
-  You lock WETH or WBTC into the `DSCEngine` contract. This collateral is valued via **Chainlink price feeds**.
-
-- **Health Factor**  
-  A number that tells you how safe your position is.  
-  - **> 1** → safe  
-  - **≤ 1** → can be liquidated
-
-- **Minting DSC**  
-  You can only mint DSC if your **collateral value / DSC debt** keeps your **health factor above the minimum**.
-
-- **Redeeming / Burning**  
-  - **Redeem collateral**: return DSC (burn) → receive your WETH / WBTC back.  
-  - **Burn DSC**: reduces your debt and improves your health factor.
-
-- **Liquidation**  
-  If someone’s health factor goes too low, another user can **liquidate** their position, repaying their DSC and taking a portion of their collateral with a small bonus.
+</div>
 
 ---
 
-## 2. Project Structure
+## 🌟 Overview
 
-- `src/`
-  - `DecentralizedStableCoin.sol` – ERC20 stablecoin implementation
-  - `DSCEngine.sol` – core protocol logic: deposit, mint, redeem, burn, liquidations, health factor checks
-  - `libraries/OracleLib.sol` – price feed helpers and sanity checks
+**RaveCoin** is a **collateral-backed, over-collateralized stablecoin** protocol that lets you:
 
-- `script/`
-  - `DeployDSC.s.sol` – deploys DSC + DSCEngine
-  - `HelperConfig.s.sol` – network‑specific addresses (Anvil / Sepolia)
-  - `DeployAndUpdateFrontend.s.sol` – deploys contracts and prints `.env` values for the frontend
+- 💰 **Deposit** blue-chip crypto assets (WETH / WBTC) as collateral
+- 🪙 **Mint** a decentralized stablecoin (DSC) pegged to $1.00
+- 🔄 **Redeem / Burn** to unlock your collateral
+- ⚡ **Liquidate** risky positions – fully on-chain, enforced by smart contracts
+- 🔒 **Verify Transactions** with AI-powered security analysis
 
-- `frontend/`
-  - React + Vite app
-  - Uses **ethers.js** and your `.env` contract addresses
-  - Apple‑style **landing page** + full **dashboard** for DSCEngine
-
-- `test/`
-  - Unit tests (`unit/DSCEngine.t.sol`)
-  - Fuzz & invariant tests (`fuzz/`)
+Built with **Foundry** for smart contracts and a **modern React + Vite frontend** featuring an elegant black & silver "timepiece" design inspired by luxury watchmaking.
 
 ---
 
-## 3. Smart Contract Features
+## ✨ Features
 
-- **Collateral Management**
-  - Deposit WETH / WBTC
-  - Redeem collateral if your health factor remains safe
+### 🏗️ Smart Contract Features
 
-- **Stablecoin Logic (`DSCEngine`)**
-  - `depositCollateral` / `redeemCollateral`
-  - `mintDsc` / `burnDsc`
-  - `liquidate` under‑collateralized positions
-  - Health factor checks before risky actions
+- ✅ **Over-Collateralization** – Your collateral value must exceed your DSC debt
+- ✅ **Health Factor System** – Real-time position safety monitoring
+- ✅ **Chainlink Price Feeds** – Decentralized, reliable price oracles
+- ✅ **Liquidation Mechanism** – Automated protection against undercollateralization
+- ✅ **Multi-Collateral Support** – WETH and WBTC support
+- ✅ **Security First** – Reentrancy guards, access controls, and comprehensive checks
 
-- **Price Feeds (Chainlink)**
-  - WETH / USD
-  - WBTC / USD
+### 🎨 Frontend Features
 
-- **Security Patterns**
-  - Over‑collateralization
-  - Health factor calculations
-  - Only allowed collateral tokens
-
-For deeper protocol details, check the contract comments in `src/DSCEngine.sol`.
+- 🖤 **Premium Black & Silver Theme** – Elegant, timepiece-inspired design
+- 🌌 **Animated Landing Page** – Orbital logo with mesmerizing effects
+- 📊 **Live Market Ticker** – Real-time crypto prices from CoinGecko
+- 💫 **Silver Meteor Effects** – Subtle background animations
+- 📱 **Fully Responsive** – Beautiful on all devices
+- 🔐 **Transaction Verifier** – AI-powered security analysis for MetaMask transactions
 
 ---
 
-## 4. Frontend – What You Get
+## 🎯 Core Concepts
 
-The frontend is a **React + Vite** single‑page app that:
+### 💵 DSC (Decentralized StableCoin)
+An ERC20 token designed to track **$1.00**, backed by more value in collateral than is minted. Think of it as a crypto-backed dollar that you can mint by locking up valuable assets.
 
-- **Landing Page**
-  - Black & silver “endless timepiece” hero with animated orbital rings
-  - Live‑feel **global market ticker** (BTC / ETH / SOL / AVAX / LINK / ARB) using live data from CoinGecko
-  - Clear explanation of:
-    - What RaveCoin is
-    - Features
-    - Use cases
-    - How it works (3‑step flow)
-  - Silver meteor background effects behind key sections
+### 🏦 Collateral (WETH / WBTC)
+You lock WETH or WBTC into the `DSCEngine` contract. This collateral is valued in real-time via **Chainlink price feeds**, ensuring accurate USD valuations.
 
-- **Wallet & Network**
-  - Connect / disconnect with **MetaMask**
-  - Uses `wallet_requestPermissions` to allow account switching
-  - Remembers explicit disconnect via `localStorage` so MetaMask doesn’t auto‑reconnect
-  - Auto‑switches to **Sepolia** and can add the network if missing
+### ❤️ Health Factor
+A critical metric that tells you how safe your position is:
+- **> 1.0** → ✅ Safe position
+- **≤ 1.0** → ⚠️ Can be liquidated
 
-- **Dashboard (once connected)**
-  - **Account Overview**
-    - Health factor (color‑coded)
-    - Total collateral value (USD)
-    - DSC minted
-  - **Collateral Positions**
-    - Per‑token:
-      - Deposited amount
-      - Wallet balance
-      - Token symbol & address (WETH / WBTC)
-  - **Actions**
-    - Deposit collateral (WETH / WBTC)
-    - Mint DSC
-    - Redeem collateral
-    - Burn DSC
-    - Liquidate unhealthy positions
-  - Loading overlay for pending transactions
+**Formula:** `(Total Collateral Value × Liquidation Threshold) / Total DSC Debt`
 
-All contract interactions are wired via custom hooks:
-- `useWeb3` – wallet / provider
-- `useDSCEngine` – reads & writes to the engine and DSC token
+### 🪙 Minting DSC
+You can mint DSC tokens against your collateral, but only if your **health factor stays above the minimum threshold**. The more collateral you have, the more DSC you can mint safely.
+
+### 🔄 Redeeming / Burning
+- **Redeem Collateral**: Return (burn) DSC → receive your WETH / WBTC back
+- **Burn DSC**: Reduces your debt and improves your health factor
+
+### ⚡ Liquidation
+If someone's health factor drops too low, another user can **liquidate** their position, repaying their DSC debt and taking a portion of their collateral with a bonus.
 
 ---
 
-## 5. Requirements
+## 📁 Project Structure
 
-- **Node.js** (LTS recommended)
-- **pnpm / npm / yarn** (any works; examples use `npm`)
-- **Foundry** (for contracts)
-- **MetaMask** (or compatible wallet)
-
-Environment:
-- For local: Anvil (comes with Foundry)
-- For testnet: Sepolia RPC (e.g. Infura / Alchemy)
+```
+RaveCoin/
+├── 📄 src/                          # Smart Contracts
+│   ├── DecentralizedStableCoin.sol  # ERC20 stablecoin implementation
+│   ├── DSCEngine.sol                # Core protocol logic
+│   └── libraries/
+│       └── OracleLib.sol            # Chainlink price feed helpers
+│
+├── 📜 script/                       # Deployment Scripts
+│   ├── DeployDSC.s.sol              # Basic deployment
+│   ├── HelperConfig.s.sol            # Network configurations
+│   └── DeployAndUpdateFrontend.s.sol # Deployment + frontend config
+│
+├── 🎨 frontend/                     # React + Vite Application
+│   ├── src/
+│   │   ├── components/             # UI Components
+│   │   ├── hooks/                   # Custom React hooks
+│   │   ├── constants/                # ABIs & addresses
+│   │   └── utils/                   # Helper functions
+│   └── package.json
+│
+└── 🧪 test/                         # Foundry Tests
+    ├── unit/                        # Unit tests
+    └── fuzz/                        # Fuzz & invariant tests
+```
 
 ---
 
-## 6. Backend Setup (Contracts)
+## 🚀 Quick Start
 
-### 6.1 Install Foundry (if not already)
+### Prerequisites
+
+- 📦 **Node.js** (LTS version recommended)
+- 🔧 **Foundry** ([Installation Guide](https://book.getfoundry.sh/getting-started/installation))
+- 🦊 **MetaMask** browser extension
+- 🌐 **Sepolia RPC URL** (for testnet deployment) – Get one from [Infura](https://infura.io) or [Alchemy](https://alchemy.com)
+
+### 1️⃣ Install Foundry
 
 ```bash
 curl -L https://foundry.paradigm.xyz | bash
 foundryup
 ```
 
-### 6.2 Install dependencies
-
-From the project root:
+### 2️⃣ Install Dependencies
 
 ```bash
+# Install Foundry dependencies
 forge install
+
+# Install frontend dependencies
+cd frontend
+npm install
+cd ..
 ```
 
-### 6.3 Local: Run Anvil
+### 3️⃣ Deploy Contracts
+
+#### 🏠 Local Development (Anvil)
 
 ```bash
+# Terminal 1: Start Anvil
 anvil
-```
 
-This starts a local Ethereum node at `http://localhost:8545` with test accounts.
-
-### 6.4 Local: Deploy contracts + generate frontend config
-
-From the project root:
-
-```bash
+# Terminal 2: Deploy contracts
 forge script script/DeployAndUpdateFrontend.s.sol:DeployAndUpdateFrontend \
   --rpc-url http://localhost:8545 \
   --broadcast
 ```
 
-The script will:
-- Deploy `DecentralizedStableCoin` + `DSCEngine`
-- Log addresses in the console in a ready‑to‑copy `.env` format, like:
+#### 🌐 Sepolia Testnet
 
-```text
+```bash
+# Set environment variables
+export PRIVATE_KEY=your_private_key_without_0x
+export SEPOLIA_RPC_URL=https://sepolia.infura.io/v3/YOUR_KEY
+export ETHERSCAN_API_KEY=your_etherscan_key
+
+# Deploy
+./deploy-sepolia.sh
+```
+
+The deployment script will print contract addresses in this format:
+
+```env
 VITE_DSC_ENGINE_ADDRESS=0x...
 VITE_DSC_TOKEN_ADDRESS=0x...
 VITE_WETH_ADDRESS=0x...
 VITE_WBTC_ADDRESS=0x...
-VITE_CHAIN_ID=31337
-```
-
-Copy these for the frontend `.env`.
-
----
-
-## 7. Sepolia Deployment
-
-All details: see **`DEPLOY_SEPOLIA.md`**.  
-Here’s the quick path.
-
-### 7.1 Set environment variables
-
-```bash
-export PRIVATE_KEY=your_private_key_without_0x
-export SEPOLIA_RPC_URL=https://sepolia.infura.io/v3/YOUR_KEY
-```
-
-### 7.2 Run the deploy script
-
-```bash
-./deploy-sepolia.sh
-```
-
-The script will:
-- Deploy to Sepolia using `DeployAndUpdateFrontend.s.sol`
-- Print the contract addresses as `VITE_...` lines for your frontend `.env`
-
-Use those values in `frontend/.env` and set:
-
-```env
 VITE_CHAIN_ID=11155111
 ```
 
----
+### 4️⃣ Configure Frontend
 
-## 8. Frontend Setup & Run
-
-From the project root:
-
-```bash
-cd frontend
-npm install
-```
-
-### 8.1 Create `.env` in `frontend/`
+Create `frontend/.env` with the addresses from deployment:
 
 ```env
-VITE_DSC_ENGINE_ADDRESS=0xYourEngineOnSepoliaOrLocal
-VITE_DSC_TOKEN_ADDRESS=0xYourDSCOnSepoliaOrLocal
-VITE_WETH_ADDRESS=0xYourWETH
-VITE_WBTC_ADDRESS=0xYourWBTC
-VITE_CHAIN_ID=11155111   # Sepolia
+VITE_DSC_ENGINE_ADDRESS=0xYourEngineAddress
+VITE_DSC_TOKEN_ADDRESS=0xYourDSCAddress
+VITE_WETH_ADDRESS=0xYourWETHAddress
+VITE_WBTC_ADDRESS=0xYourWBTCAddress
+VITE_CHAIN_ID=11155111
+VITE_OPENAI_API_KEY=your_openai_key_optional
 ```
 
-**Important:**
-- No spaces around `=` (e.g. `VITE_WETH_ADDRESS=0x...`, not `= 0x...`)
-- Make sure these addresses match what your deploy script printed.
+**⚠️ Important:** No spaces around `=` signs!
 
-### 8.2 Start the dev server
+### 5️⃣ Run Frontend
 
 ```bash
 cd frontend
 npm run dev
 ```
 
-Then open the URL shown in the terminal (usually `http://localhost:5173`).
+Open `http://localhost:5173` in your browser! 🎉
 
 ---
 
-## 9. Using the App (Flow)
+## 🎨 Frontend Features
 
-1. **Open the site (disconnected)**  
-   - You see the **landing page**:
-     - Orbital logo
-     - Explanation sections
-     - Live market ticker
-2. **Click “Connect Wallet”**
-   - MetaMask pops up (with account selection enforced)
-   - On success, the app switches to **connected dashboard**
-3. **Deposit collateral**
-   - Go to **Deposit** tab
-   - Choose WETH / WBTC and amount
-   - Approve + deposit
-4. **Mint DSC**
+### 🏠 Landing Page (Disconnected State)
+
+When you first visit RaveCoin, you're greeted by a stunning landing page:
+
+- ⚡ **Animated Hero** – RaveCoin logo at the center of three orbiting rings, creating an "endless timepiece" effect
+- 📊 **Live Market Ticker** – Continuously scrolling prices for BTC, ETH, SOL, AVAX, LINK, and ARB with real-time data from CoinGecko
+- 💫 **Silver Meteor Effects** – Subtle animated streaks in key sections
+- 📖 **Protocol Overview** – Clear explanations of features, use cases, and how it works
+- 🔗 **Seamless Connection** – One-click wallet connection that instantly transitions to the dashboard
+
+### 💼 Dashboard (Connected State)
+
+Once connected, you get access to a comprehensive dashboard:
+
+#### 📊 Account Overview
+- **Health Factor** – Color-coded indicator (green = safe, red = risky)
+- **Total Collateral Value** – USD value of all deposited collateral
+- **DSC Minted** – Your current stablecoin debt
+
+#### 💰 Collateral Positions
+For each token (WETH / WBTC):
+- Deposited amount
+- Wallet balance
+- Token symbol & address
+
+#### 🎯 Actions Available
+- **Deposit** – Lock WETH or WBTC as collateral
+- **Mint DSC** – Create stablecoins against your collateral
+- **Redeem** – Withdraw collateral by burning DSC
+- **Burn DSC** – Reduce debt to improve health factor
+- **Liquidate** – Close undercollateralized positions (with bonus!)
+
+### 🔒 Transaction Verifier (NEW! 🎉)
+
+A **premium security feature** that analyzes MetaMask transactions before you sign them:
+
+- 🔍 **AI-Powered Analysis** – Uses OpenAI GPT to detect malicious patterns
+- 🛡️ **Risk Assessment** – Get risk levels (Critical, High, Medium, Low, Safe)
+- 📋 **Function Selector Analysis** – Examines the first 4 bytes of calldata
+- 💡 **Heuristic Fallback** – Works even without an API key
+- ⚡ **Transaction Hash Support** – Paste a hash or raw calldata
+
+**How to Use:**
+1. Click the **"Verify TX"** button in the navigation bar
+2. Paste a transaction hash (from Etherscan) or raw calldata
+3. Get instant risk analysis and recommendations
+4. Make informed decisions before signing!
+
+**Setup (Optional):**
+Add `VITE_OPENAI_API_KEY` to your `frontend/.env` for enhanced AI analysis. Without it, the verifier uses heuristic analysis.
+
+---
+
+## 🏗️ Smart Contracts
+
+### Core Contracts
+
+#### `DecentralizedStableCoin.sol`
+- ERC20 token implementation
+- Burnable (users can burn their DSC)
+- Ownable (DSCEngine controls minting)
+
+#### `DSCEngine.sol`
+The heart of the protocol:
+
+**Functions:**
+- `depositCollateral()` – Lock WETH/WBTC
+- `redeemCollateral()` – Withdraw collateral (must burn DSC first)
+- `mintDsc()` – Create DSC tokens
+- `burnDsc()` – Destroy DSC tokens (reduces debt)
+- `liquidate()` – Close unhealthy positions
+- `getHealthFactor()` – Calculate position safety
+- `getAccountCollateralValue()` – Total collateral in USD
+
+**Security Features:**
+- ReentrancyGuard
+- Health factor checks before risky operations
+- Only allowed collateral tokens
+- Chainlink price feed integration
+
+#### `OracleLib.sol`
+- Price feed helpers
+- Staleness checks
+- Round completeness validation
+
+---
+
+## 🔄 Usage Flow
+
+### Complete User Journey
+
+1. **🌐 Visit Landing Page**
+   - Admire the beautiful design
+   - Read about RaveCoin's features
+   - Watch the live market ticker
+
+2. **🔗 Connect Wallet**
+   - Click "Connect Wallet"
+   - MetaMask opens with account selection
+   - App automatically switches to dashboard
+
+3. **💰 Deposit Collateral**
+   - Navigate to **Deposit** tab
+   - Select WETH or WBTC
+   - Enter amount (or click MAX)
+   - Approve token (first time only)
+   - Confirm deposit transaction
+
+4. **🪙 Mint DSC**
    - Go to **Mint DSC** tab
-   - Choose amount (stay above minimum health factor)
-5. **Redeem / Burn**
-   - Redeem: withdraw collateral  
-   - Burn: reduce DSC debt
-6. **Liquidate**
-   - If a position is unhealthy, use the **Liquidate** tab to repay their DSC and receive collateral.
+   - Enter desired DSC amount
+   - System checks health factor
+   - Confirm mint transaction
 
-All major DSCEngine functions are wired into the UI so you can test the full lifecycle: **deposit → mint → redeem / burn → liquidation**.
+5. **🔄 Manage Position**
+   - **Redeem**: Withdraw collateral by burning DSC
+   - **Burn**: Reduce DSC debt to improve health
+   - Monitor your health factor on the dashboard
+
+6. **⚡ Liquidate (Advanced)**
+   - Find unhealthy positions
+   - Use **Liquidate** tab
+   - Repay their DSC debt
+   - Receive collateral + bonus
+
+7. **🔒 Verify Transactions**
+   - Before signing any suspicious transaction
+   - Use **Verify TX** to analyze calldata
+   - Get AI-powered risk assessment
+   - Make informed decisions
 
 ---
 
-## 10. Extra Docs
+## 📚 Additional Documentation
 
-- `FRONTEND_SETUP.md` – step‑by‑step frontend details
-- `DEPLOY_SEPOLIA.md` – full Sepolia deployment guide
-- `GET_ADDRESSES.md` – how to obtain and manage contract addresses
-- `SEPOLIA_QUICK_START.md` – quick reference for Sepolia
+- 📖 [`FRONTEND_SETUP.md`](./FRONTEND_SETUP.md) – Detailed frontend setup guide
+- 🚀 [`DEPLOY_SEPOLIA.md`](./DEPLOY_SEPOLIA.md) – Complete Sepolia deployment walkthrough
+- 🔍 [`GET_ADDRESSES.md`](./GET_ADDRESSES.md) – How to retrieve and manage contract addresses
+- ⚡ [`SEPOLIA_QUICK_START.md`](./SEPOLIA_QUICK_START.md) – Quick reference for Sepolia setup
 
 ---
 
-## 11. Notes & Tips
+## 💡 Tips & Troubleshooting
 
-- If the frontend doesn’t reflect `.env` changes, restart `npm run dev`.
-- If MetaMask keeps auto‑connecting the wrong account, use MetaMask “Connected sites” to disconnect, then:
-  - Use the **Disconnect** button in the app
-  - Reconnect – our frontend forces the account picker when possible.
-- For any UI issues, the main styling lives in:
-  - `frontend/src/App.css`
-  - `frontend/src/index.css`
+### Common Issues
 
-Enjoy exploring RaveCoin – a minimal, bold, and fully interactive decentralized stablecoin platform. 💠
+**🔴 Frontend not updating?**
+- Restart `npm run dev` after changing `.env`
+- Clear browser cache
+- Check that addresses in `.env` match deployment output
+
+**🔴 MetaMask auto-connecting wrong account?**
+1. Use MetaMask "Connected sites" to disconnect
+2. Click **Disconnect** button in the app
+3. Reconnect – the app forces account selection
+
+**🔴 Transaction failing?**
+- Check your health factor (must stay above 1.0)
+- Ensure you have enough collateral
+- Verify you're on the correct network (Sepolia or local)
+
+**🔴 Dropdown not visible?**
+- The select dropdown should now have proper dark styling
+- If issues persist, check browser console for errors
+
+### Development Tips
+
+- 🧪 **Testing**: Run `forge test` to execute all smart contract tests
+- 📝 **Linting**: Use `forge fmt` to format Solidity code
+- 🔍 **Debugging**: Check browser console and Foundry logs
+- 🎨 **Styling**: Main styles in `frontend/src/App.css`
+
+---
+
+## 🛠️ Tech Stack
+
+### Smart Contracts
+- **Solidity** 0.8.19+
+- **Foundry** – Development framework
+- **Chainlink** – Price feeds
+- **OpenZeppelin** – Security libraries
+
+### Frontend
+- **React** 18+
+- **Vite** – Build tool
+- **Ethers.js** – Ethereum interaction
+- **CoinGecko API** – Market data
+
+### Security
+- **ReentrancyGuard** – Protection against reentrancy attacks
+- **Access Control** – Ownable pattern
+- **Health Factor Checks** – Prevent unsafe operations
+- **AI Transaction Verification** – Additional security layer
+
+---
+
+## 🤝 Contributing
+
+This is a personal project, but suggestions and feedback are welcome! If you find any issues or have ideas for improvements, feel free to open an issue.
+
+---
+
+## 📄 License
+
+This project is open source. See individual files for specific licenses.
+
+---
+
+## 🙏 Acknowledgments
+
+- **Chainlink** for reliable price feeds
+- **OpenZeppelin** for battle-tested security patterns
+- **Foundry** for an amazing development experience
+- **Ethereum** for the decentralized infrastructure
+
+---
+
+<div align="center">
+
+### 💎 Built with passion and precision 💎
+
+**RaveCoin** – Where elegance meets DeFi
+
+⭐ Star this repo if you find it helpful!
+
+</div>
+
+---
+
+## 📞 Support
+
+Having issues? Check the documentation files or review the smart contract comments in `src/DSCEngine.sol` for detailed protocol information.
+
+---
+
+**Made with ❤️ for the DeFi community**
+
+*"A minimal, bold, and fully interactive decentralized stablecoin platform."*
