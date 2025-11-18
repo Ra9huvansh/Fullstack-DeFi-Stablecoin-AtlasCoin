@@ -1,8 +1,6 @@
 import { useEffect, useRef, useState } from "react";
-import { useWeb3 } from "../hooks/useWeb3";
 
-const LandingPage = () => {
-  const { connectWallet, isConnecting } = useWeb3();
+const LandingPage = ({ connectWallet, isConnecting }) => {
   const [scrollY, setScrollY] = useState(0);
   const heroRef = useRef(null);
 
@@ -66,24 +64,66 @@ const LandingPage = () => {
     }
   ];
 
+  const [marketData, setMarketData] = useState(null);
+
+  const marketTicks = [
+    { symbol: "BTC", name: "Bitcoin", id: "bitcoin" },
+    { symbol: "ETH", name: "Ethereum", id: "ethereum" },
+    { symbol: "SOL", name: "Solana", id: "solana" },
+    { symbol: "AVAX", name: "Avalanche", id: "avalanche-2" },
+    { symbol: "LINK", name: "Chainlink", id: "chainlink" },
+    { symbol: "ARB", name: "Arbitrum", id: "arbitrum" },
+  ];
+  const metrics = [
+    { label: "Total Value Locked", value: "$42.3M" },
+    { label: "Collateral Assets", value: "WETH, WBTC" },
+    { label: "Health Factor Target", value: "> 1.5x" },
+    { label: "Liquidation Penalty", value: "10%" },
+    { label: "Oracle Provider", value: "Chainlink" }
+  ];
+
+  useEffect(() => {
+    const fetchMarketData = async () => {
+      try {
+        const ids = marketTicks.map(t => t.id).join(",");
+        const url = `https://api.coingecko.com/api/v3/simple/price?ids=${ids}&vs_currencies=usd&include_24hr_change=true`;
+        const res = await fetch(url);
+        if (!res.ok) return;
+        const data = await res.json();
+        setMarketData(data);
+      } catch (e) {
+        console.error("Failed to fetch market data", e);
+      }
+    };
+
+    fetchMarketData();
+    const interval = setInterval(fetchMarketData, 60000);
+    return () => clearInterval(interval);
+  }, []);
+
   return (
     <div className="landing-page">
       {/* Hero Section */}
       <section className="hero" ref={heroRef}>
         <div className="hero-background" style={{ transform: `translateY(${scrollY * 0.5}px)` }}></div>
         <div className="hero-content">
-          <div className="hero-logo">
-            <svg width="80" height="80" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <circle cx="16" cy="16" r="14" fill="url(#heroGradient)" opacity="0.95"/>
-              <path d="M16 8L20 16L16 20L12 16L16 8Z" fill="white" opacity="0.98"/>
-              <defs>
-                <linearGradient id="heroGradient" x1="0" y1="0" x2="32" y2="32">
-                  <stop offset="0%" stopColor="#c0c0c0"/>
-                  <stop offset="50%" stopColor="#ffffff"/>
-                  <stop offset="100%" stopColor="#c0c0c0"/>
-                </linearGradient>
-              </defs>
-            </svg>
+          <div className="hero-orbit">
+            <div className="hero-orbit-ring hero-orbit-ring-outer"></div>
+            <div className="hero-orbit-ring hero-orbit-ring-middle"></div>
+            <div className="hero-orbit-ring hero-orbit-ring-inner"></div>
+            <div className="hero-logo">
+              <svg width="80" height="80" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <circle cx="16" cy="16" r="14" fill="url(#heroGradient)" opacity="0.95"/>
+                <path d="M16 8L20 16L16 20L12 16L16 8Z" fill="white" opacity="0.98"/>
+                <defs>
+                  <linearGradient id="heroGradient" x1="0" y1="0" x2="32" y2="32">
+                    <stop offset="0%" stopColor="#c0c0c0"/>
+                    <stop offset="50%" stopColor="#ffffff"/>
+                    <stop offset="100%" stopColor="#c0c0c0"/>
+                  </linearGradient>
+                </defs>
+              </svg>
+            </div>
           </div>
           <div className="hero-badge">
             <span className="badge-text">Decentralized Stablecoin Protocol</span>
@@ -107,6 +147,20 @@ const LandingPage = () => {
               <path d="M7.5 15L12.5 10L7.5 5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
             </svg>
           </button>
+          <div className="metrics-ticker">
+            <div className="metrics-track">
+              {[0, 1].map((loopIndex) => (
+                <div className="metrics-row" key={loopIndex}>
+                  {metrics.map((metric, idx) => (
+                    <div className="metric-pill" key={`${loopIndex}-${idx}`}>
+                      <span className="metric-label">{metric.label}</span>
+                      <span className="metric-value">{metric.value}</span>
+                    </div>
+                  ))}
+                </div>
+              ))}
+            </div>
+          </div>
         </div>
         <div className="scroll-indicator">
           <div className="scroll-line"></div>
@@ -207,6 +261,54 @@ const LandingPage = () => {
         </div>
       </section>
 
+      {/* Global Market Strip */}
+      <section className="market-strip-section">
+        <div className="section-container">
+          <div className="market-strip-header">
+            <span className="market-strip-label">Global Markets</span>
+            <span className="market-strip-sub">Live-feel metrics from leading crypto assets</span>
+          </div>
+          <div className="crypto-ticker">
+            <div className="crypto-track">
+              {[0, 1].map((loopIndex) => (
+                <div className="crypto-row" key={loopIndex}>
+                  {marketTicks.map((tick, idx) => (
+                    <div className="crypto-pill" key={`${loopIndex}-${idx}`}>
+                      <div className="crypto-main">
+                        <span className="crypto-symbol">{tick.symbol}</span>
+                        <span className="crypto-name">{tick.name}</span>
+                      </div>
+                      <div className="crypto-meta">
+                        <span className="crypto-price">
+                          {marketData && marketData[tick.id]
+                            ? `$${marketData[tick.id].usd.toLocaleString()}`
+                            : "—"}
+                        </span>
+                        <span
+                          className={
+                            marketData && marketData[tick.id]
+                              ? `crypto-change ${
+                                  marketData[tick.id].usd_24h_change < 0 ? "negative" : "positive"
+                                }`
+                              : "crypto-change"
+                          }
+                        >
+                          {marketData && marketData[tick.id]
+                            ? `${marketData[tick.id].usd_24h_change >= 0 ? "+" : ""}${marketData[
+                                tick.id
+                              ].usd_24h_change.toFixed(2)}%`
+                            : "—"}
+                        </span>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* CTA Section */}
       <section className="cta-section">
         <div className="section-container">
@@ -266,7 +368,7 @@ const LandingPage = () => {
             </div>
           </div>
           <div className="footer-bottom">
-            <p>© 2024 RaveCoin. All rights reserved.</p>
+            <p>© 2025 RaveCoin. All rights reserved.</p>
           </div>
         </div>
       </footer>

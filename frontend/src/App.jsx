@@ -18,7 +18,7 @@ function App() {
   const [activeTab, setActiveTab] = useState("dashboard");
 
   if (!isConnected) {
-    return <LandingPage />;
+    return <LandingPage connectWallet={connectWallet} isConnecting={isConnecting} />;
   }
 
   return (

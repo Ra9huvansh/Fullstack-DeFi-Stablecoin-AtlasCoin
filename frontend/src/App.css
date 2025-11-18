@@ -980,14 +980,82 @@
   text-align: center;
   max-width: 900px;
   animation: fadeInUp 1s ease-out;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.hero-orbit {
+  position: relative;
+  width: 220px;
+  height: 220px;
+  margin: 0 auto 40px;
+}
+
+.hero-orbit-ring {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  border-radius: 999px;
+  border: 1px solid rgba(192, 192, 192, 0.25);
+  box-shadow: 0 0 20px rgba(192, 192, 192, 0.15);
+}
+
+.hero-orbit-ring-outer {
+  width: 220px;
+  height: 220px;
+  border-style: dashed;
+  border-color: rgba(192, 192, 192, 0.35);
+  animation: orbitSlow 32s linear infinite;
+}
+
+.hero-orbit-ring-middle {
+  width: 170px;
+  height: 170px;
+  border-color: rgba(192, 192, 192, 0.3);
+  animation: orbitMedium 22s linear infinite;
+}
+
+.hero-orbit-ring-inner {
+  width: 120px;
+  height: 120px;
+  border-color: rgba(192, 192, 192, 0.4);
+  animation: orbitFast 14s linear infinite;
+}
+
+.hero-orbit::before,
+.hero-orbit::after {
+  content: '';
+  position: absolute;
+  width: 6px;
+  height: 6px;
+  border-radius: 999px;
+  background: radial-gradient(circle, #ffffff 0%, #c0c0c0 60%, transparent 100%);
+  box-shadow: 0 0 16px rgba(192, 192, 192, 0.7);
+}
+
+.hero-orbit::before {
+  top: 12px;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.hero-orbit::after {
+  bottom: 10px;
+  right: 20%;
 }
 
 .hero-logo {
-  margin-bottom: 48px;
+  margin-bottom: 0;
   animation: fadeInUp 1s ease-out 0.1s both;
   display: flex;
   justify-content: center;
   align-items: center;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
 }
 
 .hero-logo svg {
@@ -1012,6 +1080,21 @@
     filter: drop-shadow(0 0 30px rgba(192, 192, 192, 0.5)) 
             drop-shadow(0 0 60px rgba(192, 192, 192, 0.3));
   }
+}
+
+@keyframes orbitSlow {
+  from { transform: translate(-50%, -50%) rotate(0deg); }
+  to { transform: translate(-50%, -50%) rotate(360deg); }
+}
+
+@keyframes orbitMedium {
+  from { transform: translate(-50%, -50%) rotate(360deg); }
+  to { transform: translate(-50%, -50%) rotate(0deg); }
+}
+
+@keyframes orbitFast {
+  from { transform: translate(-50%, -50%) rotate(0deg); }
+  to { transform: translate(-50%, -50%) rotate(-360deg); }
 }
 
 .hero-badge {
@@ -1080,6 +1163,59 @@
   margin: 0 auto 48px;
   font-weight: 300;
   animation: fadeInUp 1s ease-out 0.4s both;
+}
+
+.metrics-ticker {
+  margin-top: 40px;
+  overflow: hidden;
+  position: relative;
+  mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent);
+}
+
+.metrics-track {
+  display: flex;
+  width: max-content;
+  animation: metricsScroll 30s linear infinite;
+}
+
+.metrics-row {
+  display: flex;
+  gap: 16px;
+  padding-right: 40px;
+}
+
+.metric-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 18px;
+  border-radius: 999px;
+  border: 1px solid rgba(192, 192, 192, 0.3);
+  background: radial-gradient(circle at 0% 0%, rgba(192, 192, 192, 0.18) 0%, rgba(0, 0, 0, 0.9) 55%, rgba(0, 0, 0, 1) 100%);
+  box-shadow: 0 4px 18px rgba(192, 192, 192, 0.15);
+  white-space: nowrap;
+}
+
+.metric-label {
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: rgba(192, 192, 192, 0.8);
+}
+
+.metric-value {
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.95);
+}
+
+@keyframes metricsScroll {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
 }
 
 .hero-cta {
@@ -1186,7 +1322,7 @@
 
 .section-header {
   text-align: center;
-  margin-bottom: 80px;
+  margin-bottom: 56px;
 }
 
 .section-label {
@@ -1228,7 +1364,7 @@
 
 /* Features Section */
 .features-section {
-  padding: 160px 0;
+  padding: 120px 0;
   position: relative;
   background: linear-gradient(180deg, #000000 0%, #0a0a0a 50%, #000000 100%);
 }
@@ -1312,9 +1448,10 @@
 
 /* Use Cases Section */
 .use-cases-section {
-  padding: 160px 0;
+  padding: 110px 0;
   position: relative;
   background: #000000;
+  overflow: hidden;
 }
 
 .use-cases-grid {
@@ -1383,9 +1520,181 @@
 
 /* How It Works Section */
 .how-it-works-section {
-  padding: 160px 0;
+  padding: 110px 0;
   position: relative;
   background: linear-gradient(180deg, #000000 0%, #0a0a0a 50%, #000000 100%);
+  overflow: hidden;
+}
+
+/* Silver Meteors Background */
+.use-cases-section::before,
+.use-cases-section::after,
+.how-it-works-section::before,
+.how-it-works-section::after {
+  content: '';
+  position: absolute;
+  top: -160px;
+  width: 2px;
+  height: 360px;
+  background: linear-gradient(180deg, rgba(192, 192, 192, 0.0) 0%, rgba(255, 255, 255, 0.95) 35%, rgba(192, 192, 192, 0.0) 100%);
+  box-shadow: 0 0 24px rgba(192, 192, 192, 0.65);
+  opacity: 0.45;
+  pointer-events: none;
+}
+
+.use-cases-section::before {
+  left: 12%;
+  animation: meteorFall 4.5s linear infinite;
+}
+
+.use-cases-section::after {
+  left: 68%;
+  animation: meteorFall 5.5s linear infinite;
+  animation-delay: -2s;
+}
+
+.how-it-works-section::before {
+  left: 25%;
+  animation: meteorFall 4.8s linear infinite;
+  animation-delay: -1.2s;
+}
+
+.how-it-works-section::after {
+  left: 80%;
+  animation: meteorFall 6.2s linear infinite;
+  animation-delay: -3s;
+}
+
+@keyframes meteorFall {
+  0% {
+    transform: translate3d(0, 0, 0) rotate(12deg);
+    opacity: 0;
+  }
+  8% {
+    opacity: 0.8;
+  }
+  50% {
+    transform: translate3d(-60px, 320px, 0) rotate(12deg);
+    opacity: 0.7;
+  }
+  100% {
+    transform: translate3d(-90px, 640px, 0) rotate(12deg);
+    opacity: 0;
+  }
+}
+
+/* Market Strip Section */
+.market-strip-section {
+  padding: 40px 0 10px;
+  background: #000000;
+}
+
+.market-strip-header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 24px;
+}
+
+.market-strip-label {
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.18em;
+  color: rgba(192, 192, 192, 0.8);
+}
+
+.market-strip-sub {
+  font-size: 0.9rem;
+  color: rgba(192, 192, 192, 0.6);
+}
+
+.crypto-ticker {
+  overflow: hidden;
+  position: relative;
+  padding: 8px 0;
+  border-top: 1px solid rgba(192, 192, 192, 0.18);
+  border-bottom: 1px solid rgba(192, 192, 192, 0.18);
+  mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent);
+}
+
+.crypto-track {
+  display: flex;
+  width: max-content;
+  animation: cryptoScroll 40s linear infinite;
+}
+
+.crypto-row {
+  display: flex;
+  gap: 16px;
+  padding-right: 40px;
+}
+
+.crypto-pill {
+  display: inline-flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 10px 20px;
+  border-radius: 999px;
+  border: 1px solid rgba(192, 192, 192, 0.3);
+  background: radial-gradient(circle at 0% 0%, rgba(192, 192, 192, 0.2) 0%, rgba(0, 0, 0, 0.95) 55%, rgba(0, 0, 0, 1) 100%);
+  box-shadow: 0 4px 18px rgba(192, 192, 192, 0.2);
+  white-space: nowrap;
+  min-width: 220px;
+}
+
+.crypto-main {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 2px;
+}
+
+.crypto-symbol {
+  font-size: 0.9rem;
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.95);
+}
+
+.crypto-name {
+  font-size: 0.8rem;
+  color: rgba(192, 192, 192, 0.8);
+}
+
+.crypto-meta {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 2px;
+}
+
+.crypto-price {
+  font-size: 0.9rem;
+  color: rgba(255, 255, 255, 0.95);
+}
+
+.crypto-change {
+  font-size: 0.8rem;
+}
+
+.crypto-change.positive {
+  color: #4ade80;
+}
+
+.crypto-change.negative {
+  color: #f97373;
+}
+
+@keyframes cryptoScroll {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
 }
 
 .steps-container {
@@ -1400,7 +1709,7 @@
   display: flex;
   gap: 48px;
   align-items: flex-start;
-  padding: 48px 0;
+  padding: 32px 0;
   position: relative;
   animation: fadeInUp 0.8s ease-out both;
 }
@@ -1446,7 +1755,7 @@
 
 /* CTA Section */
 .cta-section {
-  padding: 160px 0;
+  padding: 110px 0 120px;
   position: relative;
   background: #000000;
   text-align: center;
